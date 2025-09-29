@@ -1,52 +1,97 @@
 "use client";
 
-import React from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { NavLinkProps } from "@/types";
 
-const NavLink = ({ label, href }: NavLinkProps) => {
-  const pathname = usePathname();
-  const hrefPath = href.split("/")[1];
-  const pathnamePath = pathname?.split("/")[1] || "";
+interface NavLinkProps {
+  label: string;
+  href: string;
+  isActive: boolean;
+}
+
+const NavLink = ({
+  label,
+  href,
+  isActive,
+  onClick,
+}: NavLinkProps & { onClick: () => void }) => {
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const targetId = href.substring(2); // remove '/#'
+    const targetElement = document.getElementById(targetId);
+    if (targetElement) {
+      targetElement.scrollIntoView({ behavior: "smooth" });
+    }
+    onClick(); // Close mobile menu on click
+  };
 
   return (
     <Link
       href={href}
+      onClick={handleClick}
       className={`group flex z-20 items-center gap-2 px-1 h-10 text-sm hover:bg-secondary-50 hover:text-secondary-200 rounded ${
-        hrefPath === pathnamePath
-          ? "font-medium text-secondary-200 bg-secondary-50"
-          : "font-light text-gray-400 bg-transparent"
+        isActive ? "font-medium text-secondary-200" : "font-light text-gray-400"
       }`}
     >
-      <span className="nav-indicator h-px w-6 bg-zinc-600 transition-all group-hover:w-12 group-hover:bg-amber-400 motion-reduce:transition-none"></span>
-      <span className="nav-text text-xs font-bold uppercase tracking-widest text-zinc-500 group-hover:text-zinc-100">
+      <span
+        className={`nav-indicator h-px bg-zinc-600 transition-all group-hover:w-12 group-hover:bg-amber-400 motion-reduce:transition-none ${
+          isActive ? "w-12 !bg-amber-400" : "w-6"
+        }`}
+      ></span>
+      <span
+        className={`nav-text text-xs font-bold uppercase tracking-widest group-hover:text-zinc-100 ${
+          isActive ? "text-zinc-100" : "text-zinc-500"
+        }`}
+      >
         {label}
       </span>
     </Link>
   );
 };
 
-export const Sidebar = () => {
-  const router = useRouter();
+const navigationLinks = [
+  {
+    href: "/#about",
+    label: "About",
+  },
+  {
+    href: "/#experience",
+    label: "Experience",
+  },
+  {
+    href: "/#projects",
+    label: "Projects",
+  },
+];
 
-  const navigationLinks = [
-    {
-      href: "/",
-      label: "About",
-    },
-    {
-      href: "/experience",
-      label: "Experience",
-    },
-    {
-      href: "/projects",
-      label: "Projects",
-    },
-  ];
+export const Sidebar = ({ onLinkClick }: { onLinkClick?: () => void }) => {
+  const [activeSection, setActiveSection] = useState("about");
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { rootMargin: "-30% 0px -70% 0px" }
+    );
+
+    navigationLinks.forEach((link) => {
+      const sectionId = link.href.substring(2); // remove '/#'
+      const section = document.getElementById(sectionId);
+      if (section) {
+        observer.observe(section);
+      }
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <div className="bg-[#101214] hidden lg:block fixed z-40 inset-y-0 left-0 w-[320px]  p-8 md:px-10 md:py-12 shadow-sm overflow-y-auto">
+    <div className="bg-[#101214] w-full h-full flex flex-col p-8 md:px-10 md:py-12 shadow-sm overflow-y-auto">
       <h1 className="text-2xl font-bold tracking-tight text-zinc-100">
         <Link href="/" className="hover:text-amber-300 transition-colors">
           Richard Obaitan
@@ -57,14 +102,43 @@ export const Sidebar = () => {
       </h3>
       <hr className="mt-6 mb-10 border-gray-700" />
 
-      <div className="flex flex-col min-h-[78%] justify-between">
+      <div className="flex flex-col flex-grow justify-between">
         <div className="grid grid-cols-1 gap-1">
           {navigationLinks.map((link) => (
-            <NavLink key={link.href} href={link.href} label={link.label} />
+            <NavLink
+              key={link.href}
+              href={link.href}
+              label={link.label}
+              isActive={activeSection === link.href.substring(2)}
+              onClick={onLinkClick || (() => {})}
+            />
           ))}
         </div>
 
-        <ul className="ml-1 flex items-center gap-6" aria-label="Social media">
+        <ul
+          className="ml-1 flex items-center gap-5 mb-8"
+          aria-label="Social media"
+        >
+          <li className="text-xs shrink-0">
+            <Link
+              className="block hover:text-slate-200"
+              href="mailto:elero.obaitan@gmail.com"
+              aria-label="Email"
+              title="Email"
+            >
+              <span className="sr-only">Email</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="h-6 w-6"
+                aria-hidden="true"
+              >
+                <path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z" />
+                <path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z" />
+              </svg>
+            </Link>
+          </li>
           <li className="text-xs shrink-0">
             <Link
               className="block hover:text-slate-200"

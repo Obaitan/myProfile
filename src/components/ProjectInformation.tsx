@@ -4,7 +4,7 @@ import Image from "next/image";
 
 const ProjectInformation = () => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 md:gap-x-7 gap-y-12">
+    <div className="grid grid-cols-1 md:grid-cols-2 md:gap-x-7 lg:gap-x-8 gap-y-12">
       {projects.map((project, index) => (
         <Link
           href={project.url}
@@ -23,7 +23,7 @@ const ProjectInformation = () => {
                 className="w-full rounded"
               />
             </div>
-            <div className="flex flex-wrap gap-x-2 gap-y-2.5 capitalize tracking-wide text-slate-500 hover:opacity-60 transition-opacity">
+            <div className="flex flex-wrap gap-2.5 capitalize tracking-wide text-slate-500 hover:opacity-60 transition-opacity">
               <span className="text-amber-400">{project.projectName}</span>
               <span className="text-slate-300">{`(${project.type} Project - ${project.date})`}</span>
             </div>

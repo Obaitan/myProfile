@@ -1,22 +1,21 @@
 "use client";
 
-import { useState } from "react";
-import { Sidebar } from "./Sidebar";
+interface HeaderProps {
+  isMobileMenuOpen: boolean;
+  toggleMobileMenu: () => void;
+}
 
-const HeaderComponent = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-
+const HeaderComponent = ({
+  isMobileMenuOpen,
+  toggleMobileMenu,
+}: HeaderProps) => {
   return (
     <>
-      <div className="fixed top-0 left-0 right-0 z-30 bg-zinc-950/95 backdrop-blur-sm">
-        <div className="px-6 md:px-10 lg:px-12 xl:px-0 w-full xl:w-[1160px] 2xl:w-[1320px] mx-auto h-[71px] py-4">
-          <div className="lg:hidden flex justify-between items-center gap-5">
-            <div className="space-y-1">
-              <p className="text-[15px] text-zinc-100 font-medium mb-0.5">
+      <div className="fixed top-0 left-0 right-0 z-30 bg-[#101214] xl:bg-zinc-950/95 backdrop-blur-sm">
+        <div className="px-7 md:px-10 lg:px-12 xl:px-0 w-full xl:w-[1160px] 2xl:w-[1320px] mx-auto h-[71px] py-6 relative bottom-2">
+          <div className="xl:hidden flex justify-between items-center gap-5">
+            <div>
+              <p className="text-[15px] text-zinc-100 font-medium">
                 Richard Obaitan
               </p>
               <p className="text-[11px] font-medium text-zinc-400 uppercase">
@@ -54,31 +53,6 @@ const HeaderComponent = () => {
                 )}
               </svg>
             </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile Sidebar Modal (always rendered for animation) */}
-      <div className="fixed inset-0 z-40 lg:hidden pointer-events-none">
-        {/* Backdrop */}
-        <div
-          className={`fixed inset-0 bg-black/30 backdrop-blur-sm transition-opacity duration-300 ${
-            isMobileMenuOpen
-              ? "opacity-100 pointer-events-auto"
-              : "opacity-0 pointer-events-none"
-          }`}
-          onClick={toggleMobileMenu}
-        />
-
-        {/* Sidebar */}
-        <div
-          className={`fixed top-0 left-0 h-full w-80 z-50 transition-transform duration-300 ease-in-out ${
-            isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
-          style={{ background: "#101214" }}
-        >
-          <div className="p-6 pt-20">
-            <Sidebar />
           </div>
         </div>
       </div>
