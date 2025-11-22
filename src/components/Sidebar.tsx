@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 interface NavLinkProps {
   label: string;
@@ -20,7 +20,7 @@ const NavLink = ({
     const targetId = href.substring(2); // remove '/#'
     const targetElement = document.getElementById(targetId);
     if (targetElement) {
-      targetElement.scrollIntoView({ behavior: "smooth" });
+      targetElement.scrollIntoView({ behavior: 'smooth' });
     }
     onClick(); // Close mobile menu on click
   };
@@ -30,17 +30,17 @@ const NavLink = ({
       href={href}
       onClick={handleClick}
       className={`group flex z-20 items-center gap-2 px-1 h-10 text-sm hover:bg-secondary-50 hover:text-secondary-200 rounded ${
-        isActive ? "font-medium text-secondary-200" : "font-light text-gray-400"
+        isActive ? 'font-medium text-secondary-200' : 'font-light text-gray-400'
       }`}
     >
       <span
         className={`nav-indicator h-px bg-zinc-600 transition-all group-hover:w-12 group-hover:bg-amber-400 motion-reduce:transition-none ${
-          isActive ? "w-12 !bg-amber-400" : "w-6"
+          isActive ? 'w-12 !bg-amber-400' : 'w-6'
         }`}
       ></span>
       <span
         className={`nav-text text-xs font-bold uppercase tracking-widest group-hover:text-zinc-100 ${
-          isActive ? "text-zinc-100" : "text-zinc-500"
+          isActive ? 'text-zinc-100' : 'text-zinc-500'
         }`}
       >
         {label}
@@ -51,21 +51,21 @@ const NavLink = ({
 
 const navigationLinks = [
   {
-    href: "/#about",
-    label: "About",
+    href: '/#about',
+    label: 'About',
   },
   {
-    href: "/#experience",
-    label: "Experience",
+    href: '/#experience',
+    label: 'Experience',
   },
   {
-    href: "/#projects",
-    label: "Projects",
+    href: '/#projects',
+    label: 'Projects',
   },
 ];
 
 export const Sidebar = ({ onLinkClick }: { onLinkClick?: () => void }) => {
-  const [activeSection, setActiveSection] = useState("about");
+  const [activeSection, setActiveSection] = useState('about');
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -76,7 +76,7 @@ export const Sidebar = ({ onLinkClick }: { onLinkClick?: () => void }) => {
           }
         });
       },
-      { rootMargin: "-30% 0px -70% 0px" }
+      { rootMargin: '-30% 0px -70% 0px' }
     );
 
     navigationLinks.forEach((link) => {
@@ -113,6 +113,14 @@ export const Sidebar = ({ onLinkClick }: { onLinkClick?: () => void }) => {
               onClick={onLinkClick || (() => {})}
             />
           ))}
+
+          <a
+            href="/docs/richard-obaitan_resume.pdf"
+            download="Richard-Obaitan-Resume.pdf"
+            className="bg-blue-950 px-4 py-2 rounded w-fit mt-3 text-gray-100 text-[13px] font-medium"
+          >
+            Download Resume
+          </a>
         </div>
 
         <ul
